@@ -1,5 +1,7 @@
 package Default;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class WikiCrawler {
@@ -66,6 +68,19 @@ public class WikiCrawler {
      */
     private void crawl(boolean focused){
         
+    }
+
+    //TODO implement a function here
+
+    private void getHTML(String seed){
+
+
+        try {
+            URL oururl = new URL(BASE_URL + seed );
+            InputSt
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
 }
