@@ -1,5 +1,9 @@
 package Default;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -73,12 +77,22 @@ public class WikiCrawler {
     //TODO implement a function here
 
     private void getHTML(String seed){
+        //Stringbuilder that we will use to hold the web page
+        StringBuilder HTML = new StringBuilder();
 
 
+        //Pass the URL into an input stream, use a buffered reader to deal with it
         try {
             URL oururl = new URL(BASE_URL + seed );
-            InputSt
-        } catch (MalformedURLException e) {
+            InputStream in = oururl.openStream();
+            BufferedReader reader =  new BufferedReader(new InputStreamReader(in));
+
+            String nextline;
+            //Gets the next line of HTML until threre is no more left
+            while((nextline = reader.readLine())!= null){
+
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
