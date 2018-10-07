@@ -28,12 +28,18 @@ public class PriorityQ {
         return temp;
     }
     public void remove(int i){ //removes the element from the priority queue whose array index is i.
+        if(i < 1 || i > A.size()){
+            return;
+        }
         i = i - 1;
         A.set(i, A.get(A.size()-1)); //swap last element with given spot
         A.remove(A.size()-1); //remove last element
         heapify(A,A.size(),i);
     }
     public void decrementPriority(int i, int k){ //Decrements the priority of the ith element by k.
+        if(i < 1 || i > A.size()){
+            return;
+        }
         i = i - 1;
         A.get(i).p = (A.get(i).p-k);
         heapify(A,A.size(),i);
@@ -47,13 +53,28 @@ public class PriorityQ {
         //all i in the array A used to implement the priority queue
     }
     public int getKey(int i){
-        i = i - 1;
-        return A.get(i).p; //Returns key(A[i]), where A is the array used to represent the priority queue
+        int pp = 0;
+        try {
+            i = i - 1;
+            pp = A.get(i).p;
+        }
+        catch(IndexOutOfBoundsException e){
+            System.out.println("This index is out of bounds");
+        }
+        return pp; //Returns key(A[i]), where A is the array used to represent the priority queue
     }
     public String getValue(int i){
-        i = i - 1;
-        return A.get(i).y; //Returns value(A[i]), where A is the array used to represent the priority queue
+        String pp = "";
+        try {
+            i = i - 1;
+            pp = A.get(i).y;
+        }
+        catch(IndexOutOfBoundsException e){
+            System.out.println("This index is out of bounds");
+        }
+        return pp; //Returns key(A[i]), where A is the array used to represent the priority queue
     }
+
     public Boolean isEmpty(){
         if(A.size() == 0){
             return true;//Return true if and only if the queue is empty.

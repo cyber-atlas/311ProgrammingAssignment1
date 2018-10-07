@@ -18,15 +18,15 @@ public class Main {
        /*for(int i = 0; i < t.priorityArray().length; i++){
            System.out.println(t.priorityArray()[i]);
        }*/
-        for(int i = 0; i < t.A.size(); i++){
+        for(int i = 1; i < t.A.size() + 1; i++){
             System.out.println(t.getKey(i));
         }
 
         System.out.println();
-        //t.remove(2);
-        t.decrementPriority(0,5033);
-        for(int i = 0; i < t.A.size(); i++){
-            System.out.println(t.getKey(i));
+        t.remove(2);
+        t.decrementPriority(1,5033);
+        for(int i = 1; i < t.A.size() + 1; i++){
+            System.out.println(t.getValue(i));
         }
     }
 }
