@@ -77,7 +77,7 @@ public class WikiCrawler {
 
         try {
             URL oururl = new URL(BASE_URL + seed );
-            InputSt
+            //InputSt
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
