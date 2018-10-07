@@ -1,8 +1,13 @@
 package Default;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class WikiCrawler {
 
@@ -54,6 +59,19 @@ public class WikiCrawler {
      */
     private ArrayList<String> extractLinks(String document){
 
+        /**First quotes are the string for the regex.
+         * Escape the quotes in the href
+         * Make sure it starts with wiki/
+         * [^#:] matches every character except or # or : after wiki/
+         */
+        String regex = "\"wiki/[^#:]\"";
+
+        //Compile the regex to check for matches
+        Pattern string = Pattern.compile(regex);
+
+        //TODO comntinue here
+
+
         return null;
     }
 
@@ -70,17 +88,50 @@ public class WikiCrawler {
         
     }
 
-    //TODO implement a function here
 
-    private void getHTML(String seed){
+    /**
+     * Takes the website seed and reads in the HTML of the page
+     * @param seed of the page that we are looking at
+     * @return string with the HTML from a song
+     */
+    private String getHTML(String seed){
+        //Stringbuilder that we will use to hold the web page
+        StringBuilder HTML = new StringBuilder();
 
 
+        //Pass the URL into an input stream, use a buffered reader to deal with it
         try {
+            //The full path of the page that we are visiting
             URL oururl = new URL(BASE_URL + seed );
+//<<<<<<< HEAD
             //InputSt
         } catch (MalformedURLException e) {
+//=======
+            //Reads the HTML in as an InputStream
+            //InputStream in = oururl.openStream();
+            //Reads the input stream
+            //InputStreamReader isr = new InputStreamReader(in);
+            //Puts the input stream reader into thd buffered stream reader
+            //BufferedReader reader =  new BufferedReader(isr);
+
+            //Variable to hold the next line of the string as we read it, before we add it to HTML String
+            String nextline;
+            //Gets the next line of HTML until there is no more left
+           /* while((nextline = reader.readLine())!= null){
+                //Adds the next line of text to the String
+                HTML.append(nextline);
+                //Adds a new line character because wee are only getting line contents
+                HTML.append("\n");
+            }*/
+
+            return HTML.toString();
+        } catch (IOException e) {
+//>>>>>>> 00c6198b6087f0fe9f140cce638f8554c45deb2e
             e.printStackTrace();
+            //returns null in case that we are not able to get the page we want
+            return null;
         }
+        return null;
     }
 
 }
