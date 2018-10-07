@@ -74,26 +74,43 @@ public class WikiCrawler {
         
     }
 
-    //TODO implement a function here
 
-    private void getHTML(String seed){
+    /**
+     * Takes the website seed and reads in the HTML of the page
+     * @param seed of the page that we are looking at
+     * @return string with the HTML from a song
+     */
+    private String getHTML(String seed){
         //Stringbuilder that we will use to hold the web page
         StringBuilder HTML = new StringBuilder();
 
 
         //Pass the URL into an input stream, use a buffered reader to deal with it
         try {
+            //The full path of the page that we are visiting
             URL oururl = new URL(BASE_URL + seed );
+            //Reads the HTML in as an InputStream
             InputStream in = oururl.openStream();
-            BufferedReader reader =  new BufferedReader(new InputStreamReader(in));
+            //Reads the input stream
+            InputStreamReader isr = new InputStreamReader(in);
+            //Puts the input stream reader into thd buffered stream reader
+            BufferedReader reader =  new BufferedReader(isr);
 
+            //Variable to hold the next line of the string as we read it, before we add it to HTML String
             String nextline;
-            //Gets the next line of HTML until threre is no more left
+            //Gets the next line of HTML until there is no more left
             while((nextline = reader.readLine())!= null){
-
+                //Adds the next line of text to the String
+                HTML.append(nextline);
+                //Adds a new line character because wee are only getting line contents
+                HTML.append("\n");
             }
+
+            return HTML.toString();
         } catch (IOException e) {
             e.printStackTrace();
+            //returns null in case that we are not able to get the page we want
+            return null;
         }
     }
 
