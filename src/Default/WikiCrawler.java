@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class WikiCrawler {
 
@@ -57,6 +58,19 @@ public class WikiCrawler {
      * @return list of Strings consisting of links from the document.
      */
     private ArrayList<String> extractLinks(String document){
+
+        /**First quotes are the string for the regex.
+         * Escape the quotes in the href
+         * Make sure it starts with wiki/
+         * [^#:] matches every character except or # or : after wiki/
+         */
+        String regex = "\"wiki/[^#:]\"";
+
+        //Compile the regex to check for matches
+        Pattern string = Pattern.compile(regex);
+
+        //TODO comntinue here
+
 
         return null;
     }
