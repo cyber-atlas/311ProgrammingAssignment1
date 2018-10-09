@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WikiCrawler {
@@ -67,9 +68,16 @@ public class WikiCrawler {
         String regex = "\"wiki/[^#:]\"";
 
         //Compile the regex to check for matches
-        Pattern string = Pattern.compile(regex);
+        Pattern pat = Pattern.compile(regex);
+        //Matches the string we are passing in against the compiled regex
+        Matcher match = pat.matcher(document);
 
-        //TODO comntinue here
+        while (match.find()){
+
+
+            //TODO comntinue here
+        }
+
 
 
         return null;
@@ -103,35 +111,29 @@ public class WikiCrawler {
         try {
             //The full path of the page that we are visiting
             URL oururl = new URL(BASE_URL + seed );
-//<<<<<<< HEAD
-            //InputSt
-        } catch (MalformedURLException e) {
-//=======
             //Reads the HTML in as an InputStream
-            //InputStream in = oururl.openStream();
+            InputStream in = oururl.openStream();
             //Reads the input stream
-            //InputStreamReader isr = new InputStreamReader(in);
+            InputStreamReader isr = new InputStreamReader(in);
             //Puts the input stream reader into thd buffered stream reader
-            //BufferedReader reader =  new BufferedReader(isr);
+            BufferedReader reader =  new BufferedReader(isr);
 
             //Variable to hold the next line of the string as we read it, before we add it to HTML String
             String nextline;
             //Gets the next line of HTML until there is no more left
-           /* while((nextline = reader.readLine())!= null){
+            while((nextline = reader.readLine())!= null){
                 //Adds the next line of text to the String
                 HTML.append(nextline);
                 //Adds a new line character because wee are only getting line contents
                 HTML.append("\n");
-            }*/
+            }
 
             return HTML.toString();
         } catch (IOException e) {
-//>>>>>>> 00c6198b6087f0fe9f140cce638f8554c45deb2e
             e.printStackTrace();
             //returns null in case that we are not able to get the page we want
             return null;
         }
-        return null;
     }
 
 }
