@@ -27,6 +27,7 @@ public class WikiCrawler {
     private String output;
 
 
+
     /**
      * Contstructs the WikiCrawler
      * @param seed - the releative address of the seed
@@ -41,6 +42,7 @@ public class WikiCrawler {
         this.topics = topics;
         this.output = output;
 
+
     }
 
     //TODO reate a graph, in BFS fashion
@@ -49,6 +51,8 @@ public class WikiCrawler {
 
     //TODO focused crawling, We only want to visit the pages about a certain topic, only the top 200 pages
 
+
+    //TODO fix this so that it is not using regexes. Worry about this after the rest of the code is implemented
 
     /**
      *  Extract only relative addresses of wiki links (in form /wiki/XXXX)
@@ -60,6 +64,7 @@ public class WikiCrawler {
      */
     private ArrayList<String> extractLinks(String document){
 
+        ArrayList<String> links = new ArrayList<>();
         /**First quotes are the string for the regex.
          * Escape the quotes in the href
          * Make sure it starts with wiki/
@@ -72,15 +77,16 @@ public class WikiCrawler {
         //Matches the string we are passing in against the compiled regex
         Matcher match = pat.matcher(document);
 
+
+        //while there is another match
         while (match.find()){
+            //returns the subrsting
+            links.add(match.group().substring(1,match.group().length()-1));
 
 
             //TODO comntinue here
         }
-
-
-
-        return null;
+        return links;
     }
 
     /**
@@ -102,9 +108,12 @@ public class WikiCrawler {
      * @param seed of the page that we are looking at
      * @return string with the HTML from a song
      */
+    //TODO how does one handle the HTML to string being null?
     private String getHTML(String seed){
         //Stringbuilder that we will use to hold the web page
         StringBuilder HTML = new StringBuilder();
+        //It is not time to read until we find the first occurance of <p>
+        Boolean timeToRead = false;
 
 
         //Pass the URL into an input stream, use a buffered reader to deal with it
@@ -119,15 +128,28 @@ public class WikiCrawler {
             BufferedReader reader =  new BufferedReader(isr);
 
             //Variable to hold the next line of the string as we read it, before we add it to HTML String
-            String nextline;
+            String nextLine;
             //Gets the next line of HTML until there is no more left
-            while((nextline = reader.readLine())!= null){
-                //Adds the next line of text to the String
-                HTML.append(nextline);
-                //Adds a new line character because wee are only getting line contents
-                HTML.append("\n");
+            while((nextLine = reader.readLine())!= null){
+                //Make sure nothing before the first <p> is passed into the string
+                //timeToRead will be false because be we had not reached the first <p>
+                if(!timeToRead && (nextLine.contains("<p>"))){
+                    //Gets the index of the first <p>
+                    int x = nextLine.indexOf("<p>");
+                    //Adds everything after the <p> to the StringBuilder
+                    HTML.append(nextLine.substring(x));
+                    //Set timeToRead to true
+                    timeToRead = true;
+                }
+                //timeToRead is only true after the first <p>, so the file not added to our String until after
+                if (timeToRead) {
+                    //Adds the next line of text to the String
+                    HTML.append(nextLine);
+                    //Adds a new line character because wee are only getting line contents
+                    HTML.append("\n");
+                }
             }
-
+            //Returns the String of the String Builder
             return HTML.toString();
         } catch (IOException e) {
             e.printStackTrace();
