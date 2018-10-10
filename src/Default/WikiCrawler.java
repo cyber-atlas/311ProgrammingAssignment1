@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,6 +65,9 @@ public class WikiCrawler {
      */
     private ArrayList<String> extractLinks(String document){
 
+        //We only care about links after the first <p> so we strip everything before it
+        document = stripper(document);
+
         ArrayList<String> links = new ArrayList<>();
         /**First quotes are the string for the regex.
          * Escape the quotes in the href
@@ -82,9 +86,6 @@ public class WikiCrawler {
         while (match.find()){
             //returns the subrsting
             links.add(match.group().substring(1,match.group().length()-1));
-
-
-            //TODO comntinue here
         }
         return links;
     }
@@ -157,5 +158,40 @@ public class WikiCrawler {
             return null;
         }
     }
+
+    //TODO deal with empty pages/strings
+    //helper method that strips anything before <p> tag from String
+    private String stripper(String input){
+        StringBuilder retString = new StringBuilder();
+        String nextup;
+        boolean reading = false;
+
+        Scanner scan = new Scanner(input);
+
+
+        while (scan.hasNextLine()){
+
+            nextup = scan.nextLine();
+
+            if (!reading && (nextup.contains("<p>"))){
+
+                reading = true;
+
+                //adds the substing of everything after <p> when it is found
+                retString.append(nextup.substring(nextup.indexOf("<p>")));
+                retString.append("\n");
+
+            }
+            //If we are reading, add the next line of texdt
+            if (reading){
+                retString.append(nextup);
+                retString.append("\n");
+            }
+        }
+
+        return retString.toString();
+    }
+
+
 
 }
