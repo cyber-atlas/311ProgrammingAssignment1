@@ -3,13 +3,11 @@ import java.util.ArrayList;
 //hashmap
 
 public class PriorityQ {
-    ArrayList<Node> A = new ArrayList<Node>();
+    private ArrayList<Node> A;
+
 
     public PriorityQ(){ //constructs an empty priority queue
-        for(int i = 0; i < A.size(); i++){
-            A.get(i).y = " ";
-            A.get(i).p = 0;
-        }
+        this.A = new ArrayList<Node>();
     }
     public void add(String s, int p){ //Adds a string s with priority p to the priority queue
         Node t = new Node(s, p);
@@ -28,19 +26,21 @@ public class PriorityQ {
         return temp;
     }
     public void remove(int i){ //removes the element from the priority queue whose array index is i.
-        if(i < 1 || i > A.size()){
+//        if(i < 1 || i > A.size() - 1){
+        if(i < 0 || i > A.size() - 1){
             return;
         }
-        i = i - 1;
+        //i = i - 1;
         A.set(i, A.get(A.size()-1)); //swap last element with given spot
         A.remove(A.size()-1); //remove last element
         heapify(A,A.size(),i);
     }
     public void decrementPriority(int i, int k){ //Decrements the priority of the ith element by k.
-        if(i < 1 || i > A.size()){
+       // if(i < 1 || i > A.size() - 1){
+        if(i < 0 || i > A.size() - 1){
             return;
         }
-        i = i - 1;
+        //i = i - 1;
         A.get(i).p = (A.get(i).p-k);
         heapify(A,A.size(),i);
     }
@@ -55,7 +55,7 @@ public class PriorityQ {
     public int getKey(int i){
         int pp = 0;
         try {
-            i = i - 1;
+            //i = i - 1;
             pp = A.get(i).p;
         }
         catch(IndexOutOfBoundsException e){
@@ -66,7 +66,7 @@ public class PriorityQ {
     public String getValue(int i){
         String pp = "";
         try {
-            i = i - 1;
+           // i = i - 1;
             pp = A.get(i).y;
         }
         catch(IndexOutOfBoundsException e){
