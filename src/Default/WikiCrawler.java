@@ -123,6 +123,21 @@ public class WikiCrawler {
         if (containsAllTopics(topicsHash) == false){
             //TODO find out what to do to move onto the next link and mark this one as checked
         }
+
+        //Code will only reach this point if it contians all topics
+
+        //TODO add the link to the graph
+
+        //TODO pass in the link to be searched for in BFS fashion
+        if (!focused){
+            //Crawl uin bfs
+        }
+        //TODO pass think and it's relevance to be parsed using priority queue
+        else if (focused){
+            //Add to priority queue
+            //Relevance is priotirty
+        }
+
     }
 
 
