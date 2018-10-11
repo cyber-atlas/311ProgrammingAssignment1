@@ -34,7 +34,7 @@ public class PriorityQ {
     }
     public void remove(int i){ //removes the element from the priority queue whose array index is i.
 //        if(i < 1 || i > A.size() - 1){
-        if (!isEmpty()) { //empty bad
+        if (isEmpty()) { //empty bad
             return;
         }
         if (i < 0 || i > A.size() - 1) { //out of bounds bad
