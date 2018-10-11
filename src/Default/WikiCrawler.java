@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,9 +45,10 @@ public class WikiCrawler {
         this.output = output;
 
 
+
     }
 
-    //TODO reate a graph, in BFS fashion
+    //TODO create a graph, in BFS fashion
     //TODO make sure that we are only crawlng wiki pages
     //TODO only crawling over 200 pages
 
@@ -99,8 +101,28 @@ public class WikiCrawler {
      * Not focused, explore in BFS fashion
      * @param focused returns wherthr focused or not
      */
+    //TODO how to
     private void crawl(boolean focused){
-        
+
+        Hashtable<String,Integer> topicsHash;
+        topicsHash = retTopicsHashtab();
+
+        int Relevance =0;
+
+        StringBuilder buiild = new StringBuilder(s);
+        String word = null;
+
+       //If the HTML string is in the hashTable, incremeent the value
+        if(topicsHash.contains(word)){
+            //TODO find the first index of the occurance of the topic and the subsequent ones...
+            topicsHash.put(word, (topicsHash.get(word) +1));
+            //Everytime a value is incremented, increment relevance
+            Relevance++;
+        }
+
+        if (containsAllTopics(topicsHash) == false){
+            //TODO find out what to do to move onto the next link and mark this one as checked
+        }
     }
 
 
@@ -191,6 +213,57 @@ public class WikiCrawler {
 
         return retString.toString();
     }
+
+
+    /**Iterates through all of the topics in the list
+     * adds them to the Hashtable with value 0
+     * @return Hashtable with all the topics and the number of times they were visted
+     */
+     private Hashtable retTopicsHashtab(){
+
+        Hashtable topicsHash = new Hashtable();
+        for (String s : topics){
+            topicsHash.put(s, 0);
+        }
+
+        return topicsHash;
+    }
+
+    //TODO revisit this. IDEK what is going on
+    private boolean checkTopic(String HTML) {
+        Scanner scn = new Scanner(HTML);
+        String next;
+        String word;
+
+
+//         if( topicsHash.contk)
+
+        while (scn.hasNextLine()) {
+            next = scn.nextLine();
+
+            //TODO figure out how to get each word
+
+            //TODO loop throught nad do the topic cnt stuff
+        }
+        return false;
+    }
+
+    /**
+     * Check the given hashtable against our global list of topics
+     * If the value in the hashtable is 0, that means it was not in our string, return false
+     * @param hash the hashtable that we are parsing through
+     * @return true if all of the topics were above 0 (meaning found at least 1x)
+     */
+    private boolean containsAllTopics(Hashtable<String,Integer> hash){
+         //Loops through the list of topics and checks their value in the hashtable
+         for (int i = 0; i < topics.length; i++){
+             if(hash.get(topics[i]) == 0){
+                return false;
+             }
+         }
+         return true;
+    }
+
 
 
 
