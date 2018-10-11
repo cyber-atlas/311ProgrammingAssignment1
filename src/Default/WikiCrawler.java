@@ -86,7 +86,7 @@ public class WikiCrawler {
 
         //while there is another match
         while (match.find()){
-            //returns the subrsting
+            //returns the substring
             links.add(match.group().substring(1,match.group().length()-1));
         }
         return links;

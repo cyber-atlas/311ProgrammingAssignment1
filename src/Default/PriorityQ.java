@@ -15,28 +15,40 @@ public class PriorityQ {
         Up(A, A.size() - 1);
     }
     public String returnMax(){ //returns string with highest priority
+        if (isEmpty()) {
+            return null;
+        }
         Node t = A.get(0);
         return t.y;
     }
     public String extractMax(){ //returnMax but it removes the node as well
+        if (isEmpty()) {
+            return null;
+        }
         String temp = A.get(0).y;
         A.set(0, A.get(A.size() - 1));
         A.remove(A.size() - 1);
-        heapify(A,A.size(),0);
+        heapify(A, A.size(), 0);
         return temp;
     }
     public void remove(int i){ //removes the element from the priority queue whose array index is i.
 //        if(i < 1 || i > A.size() - 1){
-        if(i < 0 || i > A.size() - 1){
+        if (!isEmpty()) {
+            return;
+        }
+        if (i < 0 || i > A.size() - 1) {
             return;
         }
         //i = i - 1;
-        A.set(i, A.get(A.size()-1)); //swap last element with given spot
-        A.remove(A.size()-1); //remove last element
-        heapify(A,A.size(),i);
+        A.set(i, A.get(A.size() - 1)); //swap last element with given spot
+        A.remove(A.size() - 1); //remove last element
+        heapify(A, A.size(), i);
     }
     public void decrementPriority(int i, int k){ //Decrements the priority of the ith element by k.
        // if(i < 1 || i > A.size() - 1){
+        if(isEmpty()){
+            return;
+        }
         if(i < 0 || i > A.size() - 1){
             return;
         }
@@ -45,6 +57,7 @@ public class PriorityQ {
         heapify(A,A.size(),i);
     }
     public int[] priorityArray(){
+        if(isEmpty()) return null;
         int[] B = new int[A.size()];
         for(int i = 0; i < A.size(); i++){
             B[i] = A.get(i).p;
