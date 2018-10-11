@@ -8,35 +8,36 @@ public class PriorityQ {
 
     public PriorityQ(){ //constructs an empty priority queue
         this.A = new ArrayList<Node>();
-    }
+    } //Initializing the queue
+
     public void add(String s, int p){ //Adds a string s with priority p to the priority queue
-        Node t = new Node(s, p);
-        A.add(t);
-        Up(A, A.size() - 1);
+        Node t = new Node(s, p); //making a new node with given s and p
+        A.add(t); //adding node
+        Up(A, A.size() - 1);//finding nodes rightful spot
     }
     public String returnMax(){ //returns string with highest priority
-        if (isEmpty()) {
+        if (isEmpty()) { //checks to make sure no empty
             return null;
         }
-        Node t = A.get(0);
+        Node t = A.get(0);//gets highest priority
         return t.y;
     }
     public String extractMax(){ //returnMax but it removes the node as well
-        if (isEmpty()) {
+        if (isEmpty()) {//checks empty bad
             return null;
         }
-        String temp = A.get(0).y;
-        A.set(0, A.get(A.size() - 1));
-        A.remove(A.size() - 1);
-        heapify(A, A.size(), 0);
+        String temp = A.get(0).y; //max string
+        A.set(0, A.get(A.size() - 1));//set last element in starting
+        A.remove(A.size() - 1);//removes last element
+        heapify(A, A.size(), 0);//finds rightful spot for root
         return temp;
     }
     public void remove(int i){ //removes the element from the priority queue whose array index is i.
 //        if(i < 1 || i > A.size() - 1){
-        if (!isEmpty()) {
+        if (!isEmpty()) { //empty bad
             return;
         }
-        if (i < 0 || i > A.size() - 1) {
+        if (i < 0 || i > A.size() - 1) { //out of bounds bad
             return;
         }
         //i = i - 1;
@@ -46,18 +47,18 @@ public class PriorityQ {
     }
     public void decrementPriority(int i, int k){ //Decrements the priority of the ith element by k.
        // if(i < 1 || i > A.size() - 1){
-        if(isEmpty()){
+        if(isEmpty()){ //empty bad
             return;
         }
-        if(i < 0 || i > A.size() - 1){
+        if(i < 0 || i > A.size() - 1){ //out of bounds bad
             return;
         }
         //i = i - 1;
-        A.get(i).p = (A.get(i).p-k);
-        heapify(A,A.size(),i);
+        A.get(i).p = (A.get(i).p-k); //decrements certain node's priority
+        heapify(A,A.size(),i); //rightful spot
     }
     public int[] priorityArray(){
-        if(isEmpty()) return null;
+        if(isEmpty()) return null; //empty bad
         int[] B = new int[A.size()];
         for(int i = 0; i < A.size(); i++){
             B[i] = A.get(i).p;
@@ -95,21 +96,22 @@ public class PriorityQ {
         return false;
     }
     public void heapify(ArrayList<Node> A, int size, int index) {
-        int largest = index;
-        int l = 2*index + 1;
-        int r = 2*index + 2;
+        int largest = index; //finds largest
+        int l = 2*index + 1; //finds left child
+        int r = 2*index + 2; //finds right child
 
-        //left
+        //checks if left is bigger
         if (l < size && A.get(l).p > A.get(largest).p)
             largest = l;
 
-        // right
+        // checks if right is bigger
         if (r < size && A.get(r).p > A.get(largest).p)
             largest = r;
 
         // If largest is not root
         if (largest != index)
         {
+            //swap
             Node swap = A.get(index);
             A.set(index, A.get(largest));
             A.set(largest, swap);

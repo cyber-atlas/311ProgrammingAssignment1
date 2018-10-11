@@ -49,7 +49,7 @@ public class WikiCrawler {
     }
 
     //TODO create a graph, in BFS fashion
-    //TODO make sure that we are only crawlng wiki pages
+    //TODO make sure that we are only crawling wiki pages
     //TODO only crawling over 200 pages
 
     //TODO focused crawling, We only want to visit the pages about a certain topic, only the top 200 pages
