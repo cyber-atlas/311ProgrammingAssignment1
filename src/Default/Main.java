@@ -18,10 +18,11 @@ public class Main {
     }*/
 
     public static void testGetHtml() throws FileNotFoundException, InterruptedException {
-        String s = "/wiki/bagpipe";
+        String s = "/wiki/modal_depth";
         //String[] arr = {"bob" , "ross"};
-        String[] arr = {};
-        WikiCrawler w = new WikiCrawler(s, 6, arr, "output.txt");
+//        String[] arr = {};
+        String[] arr = {"formula"};
+        WikiCrawler w = new WikiCrawler(s, 2, arr, "output.txt");
         String bob = w.getHTML(s);
 //        System.out.println(w.getHTML(s));
 //        System.out.println(w.stripper(w.getHTML(s)));

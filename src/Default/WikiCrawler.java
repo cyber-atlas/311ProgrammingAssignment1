@@ -71,27 +71,34 @@ public class WikiCrawler {
 
         //We only care about links after the first <p> so we strip everything before it
         document = stripper(document);
-
+        //Arraylist of links
         ArrayList<String> links = new ArrayList<>();
-
+        //Hashset to hold the links we added to ArrayList
+        HashSet<String> addedLinks = new HashSet<>();
         /**First quotes are the string for the regex.
          * Escape the quotes in the href
          * Make sure it starts with wiki/
          * [^#:] matches every character except or # or : after wiki/
          */
         String regex = "\"/wiki/[^\"#:]+\"";
-
         //Compile the regex to check for matches
         Pattern pat = Pattern.compile(regex);
         //Matches the string we are passing in against the compiled regex
         Matcher match = pat.matcher(document);
 
-
         //while there is another match
         while (match.find()) {
             //returns the substring
-            links.add(match.group().substring(1, match.group().length() - 1));
+//            links.add(match.group().substring(1, match.group().length() - 1));
+            String tempLink =(match.group().substring(1, match.group().length() - 1));
+            //If link is not in hashset, then it's not in arraylist. Add it to ArrayList
+            //This check removes duplicate links
+            if(!(addedLinks.contains(tempLink))){
+                links.add(tempLink);
+                addedLinks.add(tempLink);
+            }
         }
+        System.out.println(links.toString());
         return links;
     }
 
@@ -105,7 +112,7 @@ public class WikiCrawler {
      *
      * @param focused returns wherthr focused or not
      */
-    //TODO how to
+    //TODO need to check the seed page for topics. Also need to add it to the visitedHashmap
     public void crawl(boolean focused) throws FileNotFoundException, InterruptedException {
 
         //TODO keep track of visited page
@@ -114,7 +121,8 @@ public class WikiCrawler {
         //TODO use a while lop buther
 
 
-        int iterations = 1;
+        int iterations = 0;
+        int count =0;
 
         PriorityQ pq = new PriorityQ();
         Fifo fifoQ = new Fifo();
@@ -139,6 +147,7 @@ public class WikiCrawler {
             }
 
             //If we are doing a focused crawl, get the page we should be on from Proirity Queue, else get from BFS Q
+            //TODO fix if empty
             String pageLink;
             if (focused){
                 pageLink = pq.extractMax();
@@ -149,22 +158,32 @@ public class WikiCrawler {
             }
 
             String currentPage = getHTML(pageLink);
+//            System.out.println(currentPage);
 
             ArrayList<String> links = extractLinks(currentPage);
 
+            System.out.println("links array" + links.toArray());
             for (String link : links) {
-
+                System.out.println(link+" :links");
+                System.out.println(visitedHash);
                 if (visitedHash.contains(link)) {
                     //If the link has already been visited, and contains all topics, add to graph
                     if (visitedHash.get(link)) {
                         outFile.println(pageLink + " " + link);
+                        System.out.println(link);
                         continue;
                     } else if (!(visitedHash.get(link))) {
                         continue;
                     }
                 }
 
+
                 String document = getHTML(link);
+                count++;
+                if (count %  20 == 0){
+                    Thread.sleep(3000);
+                    count =0;
+                }
 
                 int Relevance = 0;
 
@@ -191,10 +210,13 @@ public class WikiCrawler {
 
                 //Check if all of the topics are present check if the hashset is the same length as the topics list
                 if (topicsFound.size() != topics.length) {
+                    System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
                     visitedHash.put(link, false);
                     //Continue should make it got to the next iteration of the while loop
                     continue;
                 }
+
+                System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
 
                 //Only gets here if the all of the topics are present in the hashset
                 if (focused) {
@@ -212,6 +234,7 @@ public class WikiCrawler {
                 outFile.println(pageLink + " " + link);
 
             }
+            iterations++;
         }
 
         outFile.close();
