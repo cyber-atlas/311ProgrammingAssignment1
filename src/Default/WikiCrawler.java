@@ -79,7 +79,7 @@ public class WikiCrawler {
          * Make sure it starts with wiki/
          * [^#:] matches every character except or # or : after wiki/
          */
-        String regex = "\"wiki/[^#:]\"";
+        String regex = "\"/wiki/[^\"#:]+\"";
 
         //Compile the regex to check for matches
         Pattern pat = Pattern.compile(regex);

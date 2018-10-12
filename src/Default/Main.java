@@ -17,7 +17,7 @@ public class Main {
     }*/
 
     public static void testGetHtml(){
-        String s = "/wiki/Bob_the_Builder";
+        String s = "/wiki/Complexity_theory";
         WikiCrawler w = new WikiCrawler(s, 0, new String[]{}, "");
         String bob = w.getHTML(s);
 //        System.out.println(w.getHTML(s));
