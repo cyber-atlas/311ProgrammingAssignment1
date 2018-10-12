@@ -171,11 +171,8 @@ public class WikiCrawler {
                     //If the link has already been visited, and contains all topics, add to graph
                     if (visitedHash.get(link)) {
                         outFile.println(pageLink + " " + link);
-<<<<<<< HEAD
-                        System.out.println(link);
+                        System.out.println("Adding visited link" + link);
                         continue;
-=======
->>>>>>> 1ec7614b8f4a1615d054aa12f7cf88f4d6e5e3ef
                     } else if (!(visitedHash.get(link))) {
                         break;
                     }
