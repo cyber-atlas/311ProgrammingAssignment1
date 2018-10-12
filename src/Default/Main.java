@@ -1,6 +1,7 @@
 package Default;
 
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Main {
@@ -16,20 +17,17 @@ public class Main {
         must(links.get(0).equals("/wiki/Mario"));
     }*/
 
-    public static void testGetHtml(){
+    public static void testGetHtml() throws FileNotFoundException, InterruptedException {
         String s = "/wiki/Complexity_theory";
-        WikiCrawler w = new WikiCrawler(s, 0, new String[]{}, "");
+        WikiCrawler w = new WikiCrawler(s, 100, new String[]{}, "output.txt");
         String bob = w.getHTML(s);
 //        System.out.println(w.getHTML(s));
 //        System.out.println(w.stripper(w.getHTML(s)));
         ArrayList<String> extract = w.extractLinks(bob);
-        System.out.println(extract.size());
-        for(String link : extract){
-            System.out.println(link);
-        }
+        w.crawl(false);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, InterruptedException {
         //testExtractLinks();
         testGetHtml();
     }
