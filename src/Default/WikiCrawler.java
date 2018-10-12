@@ -106,7 +106,7 @@ public class WikiCrawler {
      * @param focused returns wherthr focused or not
      */
     //TODO how to
-    private void crawl(boolean focused) throws FileNotFoundException {
+    private void crawl(boolean focused) throws FileNotFoundException, InterruptedException {
 
         //TODO keep track of visited page
         //TODO keep track of the nubmer of times crawl is called.
@@ -134,6 +134,9 @@ public class WikiCrawler {
 
         while (iterations < max) {
 
+            if (iterations %  20 == 0){
+                Thread.sleep(3000);
+            }
 
             //TODO figure out how to get the link. I am assuming from the Priority Queue or BFS Q
             //If we are doing a focused crawl, get the page we should be on from Proirity Queue, else get from BFS Q
