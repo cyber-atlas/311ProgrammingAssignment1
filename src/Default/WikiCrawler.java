@@ -67,7 +67,7 @@ public class WikiCrawler {
      * @param document representing entire HTML document
      * @return list of Strings consisting of links from the document.
      */
-    private ArrayList<String> extractLinks(String document) {
+    public ArrayList<String> extractLinks(String document) {
 
         //We only care about links after the first <p> so we strip everything before it
         document = stripper(document);
@@ -217,7 +217,7 @@ public class WikiCrawler {
      * @return string with the HTML from a song
      */
     //TODO how does one handle the HTML to string being null?
-    private String getHTML(String seed) {
+    public String getHTML(String seed) {
         //Stringbuilder that we will use to hold the web page
         StringBuilder HTML = new StringBuilder();
         //It is not time to read until we find the first occurance of <p>
@@ -274,7 +274,7 @@ public class WikiCrawler {
      * @param input HTML
      * @return Everything after the first <p>
      */
-    private String stripper(String input) {
+    public String stripper(String input) {
         StringBuilder retString = new StringBuilder();
         String nextup;
         boolean reading = false;
