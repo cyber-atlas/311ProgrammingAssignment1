@@ -23,7 +23,7 @@ public class Main {
         }
 
         System.out.println();
-        t.remove(8);
+        t.remove(5);
         t.decrementPriority(0,5033);
         for(int i = 0; i < t.priorityArray().length; i++){
             System.out.println(t.getKey(i));

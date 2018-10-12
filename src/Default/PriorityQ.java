@@ -126,11 +126,6 @@ public class PriorityQ {
             return;
         }
         else { //else work up
-            if (index % 2 == 0) { //right child
-                if ((index - 2) >= 0) {
-                    parent = (index - 2) / 2;
-                }
-            }
             if (index % 2 == 1) { //left child
                 if ((index - 1) >= 0) {
                     parent = (index - 1) / 2;
