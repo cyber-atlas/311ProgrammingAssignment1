@@ -17,11 +17,16 @@ public class BFS {
         Q.Enqueue(root); //Adding root to Fifo Q
         Discovered.add(root); //adding root to Discovered list
         while(Q.getSize() != 0) { //While Fifo Q isn't empty
+<<<<<<< HEAD
             Q.Dequeue(); //Taking out the first element
+=======
+            String str = Q.Deque(); //Taking out the first element
+>>>>>>> d06ba38329fec01c0d3102ae536abb47a802621e
             for (Link s : t.e){ //For every edge in the graph edges
                 if (!Check(s.after, Discovered)) { //if v' isn't in discovered
                     Q.Enqueue(s.after); //Adding v' to fifo
                     Discovered.add(s.after); //adding v' to Discovered
+                    System.out.println(str + " " + s.after);
                 }
             }
         }
