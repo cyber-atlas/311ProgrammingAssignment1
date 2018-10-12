@@ -317,25 +317,6 @@ public class WikiCrawler {
         return topicsHash;
     }
 
-    //TODO revisit this. IDEK what is going on
-    private boolean checkTopic(String HTML) {
-        Scanner scn = new Scanner(HTML);
-        String next;
-        String word;
-
-
-//         if( topicsHash.contk)
-
-        while (scn.hasNextLine()) {
-            next = scn.nextLine();
-
-            //TODO figure out how to get each word
-
-            //TODO loop throught nad do the topic cnt stuff
-        }
-        return false;
-    }
-
     /**
      * Check the given hashtable against our global list of topics
      * If the value in the hashtable is 0, that means it was not in our string, return false
