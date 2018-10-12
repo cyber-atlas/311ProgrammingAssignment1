@@ -138,7 +138,6 @@ public class WikiCrawler {
                 Thread.sleep(3000);
             }
 
-            //TODO figure out how to get the link. I am assuming from the Priority Queue or BFS Q
             //If we are doing a focused crawl, get the page we should be on from Proirity Queue, else get from BFS Q
             String pageLink;
             if (focused){
@@ -153,6 +152,15 @@ public class WikiCrawler {
             ArrayList<String> links = extractLinks(currentPage);
 
             for (String link : links) {
+
+                //If the link has already been visited, and contains all topics, add to graph
+                if(visitedHash.get(link)){
+                    outFile.println(pageLink + " " + link);
+                    continue;
+                }
+                else if(!(visitedHash.get(link))){
+                    continue;
+                }
 
                 String document = getHTML(link);
 
@@ -198,13 +206,13 @@ public class WikiCrawler {
                 //Add the link to the visited Hashset, becuase it is in a Queue and that means has all topics
                 visitedHash.put(link, true);
 
-                //Print the curent link adn then
-                //TODO Print
-
+                //Print the curent link and the link that has everyting needed to the graph
                 outFile.println(pageLink + " " + link);
 
             }
         }
+
+        outFile.close();
 
 
     }
