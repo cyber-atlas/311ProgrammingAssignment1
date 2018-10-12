@@ -98,7 +98,7 @@ public class WikiCrawler {
                 addedLinks.add(tempLink);
             }
         }
-        System.out.println(links.toString());
+//        System.out.println(links.toString());
         return links;
     }
 
@@ -162,7 +162,7 @@ public class WikiCrawler {
 
             ArrayList<String> links = extractLinks(currentPage);
 
-            System.out.println("links array" + links.toArray());
+            System.out.println("links array" + links.toString() + "\n");
             for (String link : links) {
                 System.out.println(link+" :links");
                 System.out.println(visitedHash);
@@ -201,7 +201,7 @@ public class WikiCrawler {
                             //index of returns an index. Add the that to i, add to relevances
                             Relevance += 1;
                             //Add topic to hashset
-                            topicsFound.add(string);
+                            topicsFound.add(topic);
                             //Change i so that we start at the previous index and after the topic word
                             i = string.indexOf(topic) + topic.length();
                         }
@@ -234,6 +234,7 @@ public class WikiCrawler {
                 outFile.println(pageLink + " " + link);
 
             }
+            System.out.println("iterations: "+ iterations);
             iterations++;
         }
 

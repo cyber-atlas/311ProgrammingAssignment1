@@ -21,13 +21,19 @@ public class Main {
         String s = "/wiki/modal_depth";
         //String[] arr = {"bob" , "ross"};
 //        String[] arr = {};
-        String[] arr = {"formula"};
+        String[] arr = {"formula"};//TODO does not work
+        for (String string: arr){
+            System.out.println("TEST INPUT TOPICS: " + string);
+        }
+//        String[] arr = {"modal"}; //TODO does not work
+
         WikiCrawler w = new WikiCrawler(s, 2, arr, "output.txt");
         String bob = w.getHTML(s);
 //        System.out.println(w.getHTML(s));
 //        System.out.println(w.stripper(w.getHTML(s)));
         ArrayList<String> extract = w.extractLinks(bob);
-        w.crawl(true);
+//        w.crawl(true);
+        w.crawl(false);
     }
 
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {
