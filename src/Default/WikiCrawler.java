@@ -1,10 +1,8 @@
 package Default;
 
 import javax.management.relation.RelationException;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,22 +31,20 @@ public class WikiCrawler {
     private Hashtable<String, Boolean> visitedHash = new Hashtable<>();
 
 
-
-
     /**
      * Contstructs the WikiCrawler
-     * @param seed - the releative address of the seed
-     * @param max - the max number of pages to be crawled
+     *
+     * @param seed   - the releative address of the seed
+     * @param max    - the max number of pages to be crawled
      * @param topics - Array of stings representing keywords ina topic-list
      * @param output - the filename where the web graph of discovered pages are written
      */
-    WikiCrawler(String seed, int max, String[] topics, String output){
+    WikiCrawler(String seed, int max, String[] topics, String output) {
         //Settinng the paramters to the instance variables
         this.seed = seed;
         this.max = max;
         this.topics = topics;
         this.output = output;
-
 
 
     }
@@ -63,19 +59,21 @@ public class WikiCrawler {
     //TODO fix this so that it is not using regexes. Worry about this after the rest of the code is implemented
 
     /**
-     *  Extract only relative addresses of wiki links (in form /wiki/XXXX)
+     * Extract only relative addresses of wiki links (in form /wiki/XXXX)
      * Only extract links that appear after the first <p> or <P>
      * Must note extract any wiki link that contains "#" or ":"
      * Must return links in the array list in the exact order in the HTML
+     *
      * @param document representing entire HTML document
      * @return list of Strings consisting of links from the document.
      */
-     private ArrayList<String> extractLinks(String document){
+    private ArrayList<String> extractLinks(String document) {
 
         //We only care about links after the first <p> so we strip everything before it
         document = stripper(document);
 
         ArrayList<String> links = new ArrayList<>();
+
         /**First quotes are the string for the regex.
          * Escape the quotes in the href
          * Make sure it starts with wiki/
@@ -90,26 +88,27 @@ public class WikiCrawler {
 
 
         //while there is another match
-        while (match.find()){
+        while (match.find()) {
             //returns the substring
-            links.add(match.group().substring(1,match.group().length()-1));
+            links.add(match.group().substring(1, match.group().length() - 1));
         }
         return links;
     }
 
     /**
      * If focused, compute Relevance(T,a)
-     *  during exploration, instead of adding to FIFO queue add to corresponding relevance to priority queue
-     *      priority is relevance
-     *  extract elements from the queue using extract max.
-     *  After crawl, explored edges should be written to output file
+     * during exploration, instead of adding to FIFO queue add to corresponding relevance to priority queue
+     * priority is relevance
+     * extract elements from the queue using extract max.
+     * After crawl, explored edges should be written to output file
      * Not focused, explore in BFS fashion
+     *
      * @param focused returns wherthr focused or not
      */
     //TODO how to
-    private void crawl(boolean focused){
+    private void crawl(boolean focused) throws FileNotFoundException {
 
-        //TODO keep track of visited pages
+        //TODO keep track of visited page
         //TODO keep track of the nubmer of times crawl is called.
         //TODO pop the page from the Q, then crawl
         //TODO use a while lop buther
@@ -117,62 +116,91 @@ public class WikiCrawler {
 
         int iterations = 1;
 
-        while(iterations < max ){
+        PriorityQ pq = new PriorityQ();
+        Fifo fifoQ = new Fifo();
 
+        //The PrintWriter we will be later using
+        PrintWriter outFile = new PrintWriter(output);
+        outFile.println(max);
 
-        //TODO figure out how to get the link. I am assuming from the Priority Queue or BFS Q
-        //If we are doing a focused crawl, get link from Proirity Queue, else get from BFS Q
-        String link = (focused)? PopFrom PQ : popBFSq;
-
-        String document = getHTML(link);
-
-        int Relevance =0;
-
-        HashSet<String> topicsFound = new HashSet<String>();
-        //Turn into an array of strings from the document splitting at spaces
-        String[] stringArr = document.split(" ");
-        //Loops through the array of strings (Entire document)
-        for (String string : stringArr){
-            //Checks if the string is in the topics hash set
-           for(String topic: topics) {
-               //Sets our start index to 0 the first time we use it
-               int i = 0;
-               //Checks if the topic is in the string, starting at index i)
-               while (string.indexOf(topic,i) != -1 ){
-                //index of returns an index. Add the that to i, add to relevances
-                   Relevance +=1;
-                   //Add topic to hashset
-                   topicsFound.add(string);
-                   //Change i so that we start at the previous index and after the topic word
-                   i = string.indexOf(topic)+ topic.length();
-               }
-           }
+        //If not focused used queue and add the seed
+        if(focused){
+            pq.add(seed,0);
+        }
+        //If not focused initialize the fifo
+        else{
+            fifoQ.Enqueue(seed);
         }
 
-       //TODO to check if all of the topics are present check if the hashset is the same length as the topics list
-        if(topicsFound.size() != topics.length){
-          visitedHash.put(link, false);
-          //Continue should make it got to the next iteration of the while loop
-            continue;
-        }
+        while (iterations < max) {
 
-        //Only gets here if the all of the topics are present in the hashset
-            if(focused){
-                 //TODO Add to the Priority Queue
-        priority queue add (link, Relevance)
+
+            //TODO figure out how to get the link. I am assuming from the Priority Queue or BFS Q
+            //If we are doing a focused crawl, get the page we should be on from Proirity Queue, else get from BFS Q
+            String pageLink;
+            if (focused){
+                pageLink = pq.extractMax();
+            }
+            else {
+                pageLink = fifoQ.Dequeue();
             }
 
-            if(!focused){
-                //TODO add to BFS queue
-                BFS queue add (link);
+            String currentPage = getHTML(pageLink);
+
+            ArrayList<String> links = extractLinks(currentPage);
+
+            for (String link : links) {
+
+                String document = getHTML(link);
+
+                int Relevance = 0;
+
+                HashSet<String> topicsFound = new HashSet<String>();
+                //Turn into an array of strings from the document splitting at spaces
+                String[] stringArr = document.split(" ");
+                //Loops through the array of strings (Entire document)
+                for (String string : stringArr) {
+                    //Checks if the string is in the topics hash set
+                    for (String topic : topics) {
+                        //Sets our start index to 0 the first time we use it
+                        int i = 0;
+                        //Checks if the topic is in the string, starting at index i)
+                        while (string.indexOf(topic, i) != -1) {
+                            //index of returns an index. Add the that to i, add to relevances
+                            Relevance += 1;
+                            //Add topic to hashset
+                            topicsFound.add(string);
+                            //Change i so that we start at the previous index and after the topic word
+                            i = string.indexOf(topic) + topic.length();
+                        }
+                    }
+                }
+
+                //Check if all of the topics are present check if the hashset is the same length as the topics list
+                if (topicsFound.size() != topics.length) {
+                    visitedHash.put(link, false);
+                    //Continue should make it got to the next iteration of the while loop
+                    continue;
+                }
+
+                //Only gets here if the all of the topics are present in the hashset
+                if (focused) {
+                    pq.add(link, Relevance);
+                }
+
+                if (!focused) {
+                    fifoQ.Enqueue(link);
+                }
+
+                //Add the link to the visited Hashset, becuase it is in a Queue and that means has all topics
+                visitedHash.put(link, true);
+
+                //Print the curent link adn then
+                //TODO Print
+
+                outFile.println(pageLink + " " + link);
+
             }
-
-            //Add the link to the visited Hashset, becuase it is in a Queue and that means has all topics
-            visitedHash.put(link, true);
-
-            //Print the curent link adn then
-
-
         }
 
 
@@ -181,11 +209,12 @@ public class WikiCrawler {
 
     /**
      * Takes the website seed and reads in the HTML of the page
+     *
      * @param seed of the page that we are looking at
      * @return string with the HTML from a song
      */
     //TODO how does one handle the HTML to string being null?
-    private String getHTML(String seed){
+    private String getHTML(String seed) {
         //Stringbuilder that we will use to hold the web page
         StringBuilder HTML = new StringBuilder();
         //It is not time to read until we find the first occurance of <p>
@@ -195,21 +224,21 @@ public class WikiCrawler {
         //Pass the URL into an input stream, use a buffered reader to deal with it
         try {
             //The full path of the page that we are visiting
-            URL oururl = new URL(BASE_URL + seed );
+            URL oururl = new URL(BASE_URL + seed);
             //Reads the HTML in as an InputStream
             InputStream in = oururl.openStream();
             //Reads the input stream
             InputStreamReader isr = new InputStreamReader(in);
             //Puts the input stream reader into thd buffered stream reader
-            BufferedReader reader =  new BufferedReader(isr);
+            BufferedReader reader = new BufferedReader(isr);
 
             //Variable to hold the next line of the string as we read it, before we add it to HTML String
             String nextLine;
             //Gets the next line of HTML until there is no more left
-            while((nextLine = reader.readLine())!= null){
+            while ((nextLine = reader.readLine()) != null) {
                 //Make sure nothing before the first <p> is passed into the string
                 //timeToRead will be false because be we had not reached the first <p>, assuming lowercase
-                if(!timeToRead && (nextLine.toLowerCase().contains("<p>"))){
+                if (!timeToRead && (nextLine.toLowerCase().contains("<p>"))) {
                     //Gets the index of the first <p> making sure in lowercase for simplicity
                     int x = nextLine.toLowerCase().indexOf("<p>");
                     //Adds everything after the <p> to the StringBuilder
@@ -237,20 +266,21 @@ public class WikiCrawler {
     //helper method that strips anything before <p> tag from String
 
     /**
-     *Helper method that strips anything before <p> tag from String
+     * Helper method that strips anything before <p> tag from String
+     *
      * @param input HTML
      * @return Everything after the first <p>
      */
-    private String stripper(String input){
+    private String stripper(String input) {
         StringBuilder retString = new StringBuilder();
         String nextup;
         boolean reading = false;
         Scanner scan = new Scanner(input);
 
-        while (scan.hasNextLine()){
+        while (scan.hasNextLine()) {
             nextup = scan.nextLine();
             //To deal with P
-            if (!reading && (nextup.toLowerCase().contains("<p>"))){
+            if (!reading && (nextup.toLowerCase().contains("<p>"))) {
                 reading = true;
                 //adds the substing of everything after <p> when it is found
                 retString.append(nextup.substring(nextup.toLowerCase().indexOf("<p>")));
@@ -258,7 +288,7 @@ public class WikiCrawler {
             }
             //TODO probably could just break after we strip the stuff before the first <p> Return substring starting with it
             //If we are reading, add the next line of texdt
-            if (reading){
+            if (reading) {
                 retString.append(nextup);
                 retString.append("\n");
             }
@@ -268,14 +298,16 @@ public class WikiCrawler {
     }
 
 
-    /**Iterates through all of the topics in the list
+    /**
+     * Iterates through all of the topics in the list
      * adds them to the Hashtable with value 0
+     *
      * @return Hashtable with all the topics and the number of times they were visted
      */
-     private Hashtable retTopicsHashtab(){
+    private Hashtable retTopicsHashtab() {
 
         Hashtable topicsHash = new Hashtable();
-        for (String s : topics){
+        for (String s : topics) {
             topicsHash.put(s, 0);
         }
 
@@ -304,20 +336,19 @@ public class WikiCrawler {
     /**
      * Check the given hashtable against our global list of topics
      * If the value in the hashtable is 0, that means it was not in our string, return false
+     *
      * @param hash the hashtable that we are parsing through
      * @return true if all of the topics were above 0 (meaning found at least 1x)
      */
-    private boolean containsAllTopics(Hashtable<String,Integer> hash){
-         //Loops through the list of topics and checks their value in the hashtable
-         for (int i = 0; i < topics.length; i++){
-             if(hash.get(topics[i]) == 0){
+    private boolean containsAllTopics(Hashtable<String, Integer> hash) {
+        //Loops through the list of topics and checks their value in the hashtable
+        for (int i = 0; i < topics.length; i++) {
+            if (hash.get(topics[i]) == 0) {
                 return false;
-             }
-         }
-         return true;
+            }
+        }
+        return true;
     }
-
-
 
 
 }

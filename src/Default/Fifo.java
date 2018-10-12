@@ -10,7 +10,7 @@ public class Fifo {
         head = 0;
     }
 
-    public void Enque(String input){ //Adds to queue
+    public void Enqueue(String input){ //Adds to queue
         A.add(input);
     }
 
@@ -21,7 +21,7 @@ public class Fifo {
         return (A.size() - head);
     }
 
-    public String Deque(){ //Moves head position to the right.
+    public String Dequeue(){ //Moves head position to the right.
         //Removes first position at head
         if(head == A.size()){
             return null;
