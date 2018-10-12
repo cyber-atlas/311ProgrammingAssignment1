@@ -29,6 +29,9 @@ public class WikiCrawler {
     private String[] topics;
     //String representing the filename where web graph over discovered pages are written
     private String output;
+    //Hashtable to check the
+    private Hashtable<String, Boolean> visitedHash = new Hashtable<>();
+
 
 
 
@@ -111,6 +114,12 @@ public class WikiCrawler {
         //TODO pop the page from the Q, then crawl
         //TODO use a while lop buther
 
+
+        int iterations = 1;
+
+        while(iterations < max ){
+
+
         //TODO figure out how to get the link. I am assuming from the Priority Queue or BFS Q
         //If we are doing a focused crawl, get link from Proirity Queue, else get from BFS Q
         String link = (focused)? PopFrom PQ : popBFSq;
@@ -141,54 +150,29 @@ public class WikiCrawler {
         }
 
        //TODO to check if all of the topics are present check if the hashset is the same length as the topics list
-        
-
-
-
-        Hashtable<String,Integer> topicsHash;
-        topicsHash = retTopicsHashtab();
-
-
-        StringBuilder buiild = new StringBuilder();
-        String word = null;
-
-        String next;
-        String word;
-
-
-
-        while (scn.hasNextLine()) {
-            next = scn.nextLine();
-
-            //TODO figure out how to get each word
-
-            //TODO loop throught nad do the topic cnt stuff
+        if(topicsFound.size() != topics.length){
+          visitedHash.put(link, false);
+          //Continue should make it got to the next iteration of the while loop
+            continue;
         }
 
-       //If the HTML string is in the hashTable, incremeent the value
-        if(topicsHash.contains(word)){
-            //TODO find the first index of the occurance of the topic and the subsequent ones...
-            topicsHash.put(word, (topicsHash.get(word) +1));
-            //Everytime a value is incremented, increment relevance
-            Relevance++;
-        }
+        //Only gets here if the all of the topics are present in the hashset
+            if(focused){
+                 //TODO Add to the Priority Queue
+        priority queue add (link, Relevance)
+            }
 
-        if (containsAllTopics(topicsHash) == false){
-            //TODO find out what to do to move onto the next link and mark this one as checked
-        }
+            if(!focused){
+                //TODO add to BFS queue
+                BFS queue add (link);
+            }
 
-        //Code will only reach this point if it contians all topics
+            //Add the link to the visited Hashset, becuase it is in a Queue and that means has all topics
+            visitedHash.put(link, true);
 
-        //TODO add the link to the graph
+            //Print the curent link adn then
 
-        //TODO pass in the link to be searched for in BFS fashion
-        if (!focused){
-            //Crawl uin bfs
-        }
-        //TODO pass think and it's relevance to be parsed using priority queue
-        else if (focused){
-            //Add to priority queue
-            //Relevance is priotirty
+
         }
 
 
