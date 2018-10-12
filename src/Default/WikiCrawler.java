@@ -1,5 +1,6 @@
 package Default;
 
+import javax.management.relation.RelationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -65,7 +67,7 @@ public class WikiCrawler {
      * @param document representing entire HTML document
      * @return list of Strings consisting of links from the document.
      */
-    private ArrayList<String> extractLinks(String document){
+     private ArrayList<String> extractLinks(String document){
 
         //We only care about links after the first <p> so we strip everything before it
         document = stripper(document);
@@ -104,13 +106,64 @@ public class WikiCrawler {
     //TODO how to
     private void crawl(boolean focused){
 
-        Hashtable<String,Integer> topicsHash;
-        topicsHash = retTopicsHashtab();
+        //TODO keep track of visited pages
+        //TODO keep track of the nubmer of times crawl is called.
+        //TODO pop the page from the Q, then crawl
+        //TODO use a while lop buther
+
+        //TODO figure out how to get the link. I am assuming from the Priority Queue or BFS Q
+        //If we are doing a focused crawl, get link from Proirity Queue, else get from BFS Q
+        String link = (focused)? PopFrom PQ : popBFSq;
+
+        String document = getHTML(link);
 
         int Relevance =0;
 
-        StringBuilder buiild = new StringBuilder(s);
+        HashSet<String> topicsFound = new HashSet<String>();
+        //Turn into an array of strings from the document splitting at spaces
+        String[] stringArr = document.split(" ");
+        //Loops through the array of strings (Entire document)
+        for (String string : stringArr){
+            //Checks if the string is in the topics hash set
+           for(String topic: topics) {
+               //Sets our start index to 0 the first time we use it
+               int i = 0;
+               //Checks if the topic is in the string, starting at index i)
+               while (string.indexOf(topic,i) != -1 ){
+                //index of returns an index. Add the that to i, add to relevances
+                   Relevance +=1;
+                   //Add topic to hashset
+                   topicsFound.add(string);
+                   //Change i so that we start at the previous index and after the topic word
+                   i = string.indexOf(topic)+ topic.length();
+               }
+           }
+        }
+
+       //TODO to check if all of the topics are present check if the hashset is the same length as the topics list
+        
+
+
+
+        Hashtable<String,Integer> topicsHash;
+        topicsHash = retTopicsHashtab();
+
+
+        StringBuilder buiild = new StringBuilder();
         String word = null;
+
+        String next;
+        String word;
+
+
+
+        while (scn.hasNextLine()) {
+            next = scn.nextLine();
+
+            //TODO figure out how to get each word
+
+            //TODO loop throught nad do the topic cnt stuff
+        }
 
        //If the HTML string is in the hashTable, incremeent the value
         if(topicsHash.contains(word)){
@@ -137,6 +190,7 @@ public class WikiCrawler {
             //Add to priority queue
             //Relevance is priotirty
         }
+
 
     }
 
@@ -170,10 +224,10 @@ public class WikiCrawler {
             //Gets the next line of HTML until there is no more left
             while((nextLine = reader.readLine())!= null){
                 //Make sure nothing before the first <p> is passed into the string
-                //timeToRead will be false because be we had not reached the first <p>
-                if(!timeToRead && (nextLine.contains("<p>"))){
-                    //Gets the index of the first <p>
-                    int x = nextLine.indexOf("<p>");
+                //timeToRead will be false because be we had not reached the first <p>, assuming lowercase
+                if(!timeToRead && (nextLine.toLowerCase().contains("<p>"))){
+                    //Gets the index of the first <p> making sure in lowercase for simplicity
+                    int x = nextLine.toLowerCase().indexOf("<p>");
                     //Adds everything after the <p> to the StringBuilder
                     HTML.append(nextLine.substring(x));
                     //Set timeToRead to true
@@ -196,29 +250,29 @@ public class WikiCrawler {
         }
     }
 
-    //TODO deal with empty pages/strings
     //helper method that strips anything before <p> tag from String
+
+    /**
+     *Helper method that strips anything before <p> tag from String
+     * @param input HTML
+     * @return Everything after the first <p>
+     */
     private String stripper(String input){
         StringBuilder retString = new StringBuilder();
         String nextup;
         boolean reading = false;
-
         Scanner scan = new Scanner(input);
 
-
         while (scan.hasNextLine()){
-
             nextup = scan.nextLine();
-
-            if (!reading && (nextup.contains("<p>"))){
-
+            //To deal with P
+            if (!reading && (nextup.toLowerCase().contains("<p>"))){
                 reading = true;
-
                 //adds the substing of everything after <p> when it is found
-                retString.append(nextup.substring(nextup.indexOf("<p>")));
+                retString.append(nextup.substring(nextup.toLowerCase().indexOf("<p>")));
                 retString.append("\n");
-
             }
+            //TODO probably could just break after we strip the stuff before the first <p> Return substring starting with it
             //If we are reading, add the next line of texdt
             if (reading){
                 retString.append(nextup);
