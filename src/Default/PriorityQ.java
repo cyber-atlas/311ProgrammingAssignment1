@@ -4,16 +4,19 @@ import java.util.ArrayList;
 
 public class PriorityQ {
     private ArrayList<Node> A;
+    private int n;
 
 
     public PriorityQ(){ //constructs an empty priority queue
         this.A = new ArrayList<Node>();
+        n = 0;
     } //Initializing the queue
 
     public void add(String s, int p){ //Adds a string s with priority p to the priority queue
         Node t = new Node(s, p); //making a new node with given s and p
         A.add(t); //adding node
         Up(A, A.size() - 1);//finding nodes rightful spot
+        n += 1;
     }
     public String returnMax(){ //returns string with highest priority
         if (isEmpty()) { //checks to make sure no empty
@@ -30,6 +33,7 @@ public class PriorityQ {
         A.set(0, A.get(A.size() - 1));//set last element in starting
         A.remove(A.size() - 1);//removes last element
         heapify(A, A.size(), 0);//finds rightful spot for root
+        n -= 1;
         return temp;
     }
     public void remove(int i){ //removes the element from the priority queue whose array index is i.
@@ -43,6 +47,7 @@ public class PriorityQ {
         //i = i - 1;
         A.set(i, A.get(A.size() - 1)); //swap last element with given spot
         A.remove(A.size() - 1); //remove last element
+        n -= 1;
         heapify(A, A.size(), i);
     }
     public void decrementPriority(int i, int k){ //Decrements the priority of the ith element by k.
@@ -90,7 +95,7 @@ public class PriorityQ {
     }
 
     public Boolean isEmpty(){
-        if(A.size() == 0){
+        if(n == 0){
             return true;//Return true if and only if the queue is empty.
         }
         return false;

@@ -31,9 +31,15 @@ public class Main {
         String bob = w.getHTML(s);
 //        System.out.println(w.getHTML(s));
 //        System.out.println(w.stripper(w.getHTML(s)));
+        //System.out.println(w.extractLinks(bob));
         ArrayList<String> extract = w.extractLinks(bob);
+<<<<<<< HEAD
 //        w.crawl(true);
         w.crawl(false);
+=======
+
+        w.crawl(true);
+>>>>>>> 1ec7614b8f4a1615d054aa12f7cf88f4d6e5e3ef
     }
 
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {
