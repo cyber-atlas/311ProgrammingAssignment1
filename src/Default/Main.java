@@ -25,7 +25,9 @@ public class Main {
         String bob = w.getHTML(s);
 //        System.out.println(w.getHTML(s));
 //        System.out.println(w.stripper(w.getHTML(s)));
+        //System.out.println(w.extractLinks(bob));
         ArrayList<String> extract = w.extractLinks(bob);
+
         w.crawl(true);
     }
 

@@ -141,6 +141,7 @@ public class WikiCrawler {
             //If we are doing a focused crawl, get the page we should be on from Proirity Queue, else get from BFS Q
             String pageLink;
             if (focused){
+                if(pq.isEmpty()){return;}
                 pageLink = pq.extractMax();
             }
             else {
@@ -158,9 +159,8 @@ public class WikiCrawler {
                     //If the link has already been visited, and contains all topics, add to graph
                     if (visitedHash.get(link)) {
                         outFile.println(pageLink + " " + link);
-                        continue;
                     } else if (!(visitedHash.get(link))) {
-                        continue;
+                        break;
                     }
                 }
 
