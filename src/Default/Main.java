@@ -18,13 +18,15 @@ public class Main {
     }*/
 
     public static void testGetHtml() throws FileNotFoundException, InterruptedException {
-        String s = "/wiki/Complexity_theory";
-        WikiCrawler w = new WikiCrawler(s, 100, new String[]{}, "output.txt");
+        String s = "/wiki/bagpipe";
+        //String[] arr = {"bob" , "ross"};
+        String[] arr = {};
+        WikiCrawler w = new WikiCrawler(s, 6, arr, "output.txt");
         String bob = w.getHTML(s);
 //        System.out.println(w.getHTML(s));
 //        System.out.println(w.stripper(w.getHTML(s)));
         ArrayList<String> extract = w.extractLinks(bob);
-        w.crawl(false);
+        w.crawl(true);
     }
 
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {

@@ -144,6 +144,7 @@ public class WikiCrawler {
                 pageLink = pq.extractMax();
             }
             else {
+                if(fifoQ.getSize() == 0){return;}
                 pageLink = fifoQ.Dequeue();
             }
 
@@ -153,13 +154,14 @@ public class WikiCrawler {
 
             for (String link : links) {
 
-                //If the link has already been visited, and contains all topics, add to graph
-                if(visitedHash.get(link)){
-                    outFile.println(pageLink + " " + link);
-                    continue;
-                }
-                else if(!(visitedHash.get(link))){
-                    continue;
+                if (visitedHash.contains(link)) {
+                    //If the link has already been visited, and contains all topics, add to graph
+                    if (visitedHash.get(link)) {
+                        outFile.println(pageLink + " " + link);
+                        continue;
+                    } else if (!(visitedHash.get(link))) {
+                        continue;
+                    }
                 }
 
                 String document = getHTML(link);
