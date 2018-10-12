@@ -106,7 +106,7 @@ public class WikiCrawler {
      * @param focused returns wherthr focused or not
      */
     //TODO how to
-    private void crawl(boolean focused) throws FileNotFoundException, InterruptedException {
+    public void crawl(boolean focused) throws FileNotFoundException, InterruptedException {
 
         //TODO keep track of visited page
         //TODO keep track of the nubmer of times crawl is called.
