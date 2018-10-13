@@ -48,16 +48,6 @@ public class WikiCrawler {
 
 
     }
-
-    //TODO create a graph, in BFS fashion
-    //TODO make sure that we are only crawling wiki pages
-    //TODO only crawling over 200 pages
-
-    //TODO focused crawling, We only want to visit the pages about a certain topic, only the top 200 pages
-
-
-    //TODO fix this so that it is not using regexes. Worry about this after the rest of the code is implemented
-
     /**
      * Extract only relative addresses of wiki links (in form /wiki/XXXX)
      * Only extract links that appear after the first <p> or <P>
@@ -68,7 +58,6 @@ public class WikiCrawler {
      * @return list of Strings consisting of links from the document.
      */
     public ArrayList<String> extractLinks(String document) {
-
         //We only care about links after the first <p> so we strip everything before it
         document = stripper(document);
         //Arraylist of links
@@ -112,18 +101,11 @@ public class WikiCrawler {
      *
      * @param focused returns wherthr focused or not
      */
-    //TODO need to check the seed page for topics. Also need to add it to the visitedHashmap
     public void crawl(boolean focused) throws FileNotFoundException, InterruptedException {
-
-        //TODO keep track of visited page
-        //TODO keep track of the nubmer of times crawl is called.
-        //TODO pop the page from the Q, then crawl
-        //TODO use a while lop buther
-
 
         int iterations = 0;
         int count =0;
-
+        //Counts the number of times you add to the queue
         int maxCounter = 0;
 
         PriorityQ pq = new PriorityQ();
@@ -156,7 +138,6 @@ public class WikiCrawler {
             }*/
 
             //If we are doing a focused crawl, get the page we should be on from Proirity Queue, else get from BFS Q
-            //TODO fix if empty
             String pageLink;
             if (focused){
                 if(pq.isEmpty()){return;}
@@ -164,7 +145,6 @@ public class WikiCrawler {
             }
             else {
                 if(fifoQ.getSize() == 0){return;}
-                //TODO update fifo size
                 pageLink = fifoQ.Dequeue();
             }
 
@@ -396,7 +376,6 @@ public class WikiCrawler {
                 retString.append("\n");
             }
          **/
-            //TODO probably could just break after we strip the stuff before the first <p> Return substring starting with it
             //If we are reading, add the next line of texdt
             /**
             if (reading) {
