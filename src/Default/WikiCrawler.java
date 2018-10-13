@@ -17,8 +17,8 @@ public class WikiCrawler {
     /**
      * The base url of the site we are using
      */
-//    public static final String BASE_URL = "https://en.wikipedia.org";
-    public static final String BASE_URL = "http://web.cs.iastate.edu/~pavan";
+    public static final String BASE_URL = "https://en.wikipedia.org";
+//    public static final String BASE_URL = "http://web.cs.iastate.edu/~pavan";
     //Seed is the related address of URL (within the wiki domain)
     private String seed;
     //Max is the maximum number of pages to consider
@@ -99,7 +99,7 @@ public class WikiCrawler {
      * After crawl, explored edges should be written to output file
      * Not focused, explore in BFS fashion
      *
-     * @param focused returns wherthr focused or not
+     * @param focused returns whether focused or not
      */
     public void crawl(boolean focused) throws FileNotFoundException, InterruptedException {
 
@@ -133,9 +133,6 @@ public class WikiCrawler {
 
         while (iterations < max) {
 
-           /* if (iterations %  20 == 0){
-                Thread.sleep(3000);
-            }*/
 
             //If we are doing a focused crawl, get the page we should be on from Proirity Queue, else get from BFS Q
             String pageLink;
@@ -179,6 +176,7 @@ public class WikiCrawler {
 
 
                 String document = getHTML(link);
+                //Every 20 calls to getHTML, sleeps for 3000 milliseconds
                 count++;
                 if (count %  20 == 0){
                     Thread.sleep(3000);
@@ -244,29 +242,6 @@ public class WikiCrawler {
 
                 }
 
-
-                /**
-                 //Check if all of the topics are present check if the hashset is the same length as the topics list
-                 if (topicsFound.size() != topics.length) {
-                 //System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
-                 visitedHash.put(link, false);
-                 //Continue should make it got to the next iteration of the while loop
-                 return;
-                 }
-                 **/
-
-                //System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
-/**
- //Only gets here if the all of the topics are present in the hashset
- if (focused) {
- pq.add(link, Relevance);
- }
-
- if (!focused) {
- fifoQ.Enqueue(link);
- //System.out.println(fifoQ.nSize);
- }
- **/
                 //Add the link to the visited Hashset, becuase it is in a Queue and that means has all topics
 //                visitedHash.put(link, true);
 
@@ -362,69 +337,12 @@ public class WikiCrawler {
         else{
             return input.substring(index);
         }
-        /**
-        //Get the substring of the index of the
-        String retstring = input.substring(input.toLowerCase().indexOf("<p>")));
 
-        while (scan.hasNextLine()) {
-            nextup = scan.nextLine();
-            //To deal with P
-            if (!reading && (nextup.toLowerCase().contains("<p>"))) {
-                reading = true;
-                //adds the substing of everything after <p> when it is found
-                retString.append(nextup.substring(nextup.toLowerCase().indexOf("<p>")));
-                retString.append("\n");
-            }
-         **/
-            //If we are reading, add the next line of texdt
-            /**
-            if (reading) {
-                retString.append(nextup);
-                retString.append("\n");
-            }
-             **/
-            /**
-            retString = ()
-        }
-
-
-        return retString.toString();
-             **/
     }
 
 
-    /**
-     * Iterates through all of the topics in the list
-     * adds them to the Hashtable with value 0
-     *
-     * @return Hashtable with all the topics and the number of times they were visted
-     */
-    private Hashtable retTopicsHashtab() {
 
-        Hashtable topicsHash = new Hashtable();
-        for (String s : topics) {
-            topicsHash.put(s, 0);
-        }
 
-        return topicsHash;
-    }
-
-    /**
-     * Check the given hashtable against our global list of topics
-     * If the value in the hashtable is 0, that means it was not in our string, return false
-     *
-     * @param hash the hashtable that we are parsing through
-     * @return true if all of the topics were above 0 (meaning found at least 1x)
-     */
-    private boolean containsAllTopics(Hashtable<String, Integer> hash) {
-        //Loops through the list of topics and checks their value in the hashtable
-        for (int i = 0; i < topics.length; i++) {
-            if (hash.get(topics[i]) == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
 
 
 }

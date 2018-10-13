@@ -1,9 +1,5 @@
-6
-/wiki/A.html /wiki/B.html
-/wiki/A.html /wiki/C.html
-/wiki/A.html /wiki/D.html
-/wiki/B.html /wiki/I.html
-/wiki/B.html /wiki/J.html
-/wiki/C.html /wiki/B.html
-/wiki/C.html /wiki/D.html
-/wiki/D.html /wiki/A.html
+3
+/wiki/Modal_depth /wiki/Modal_logic
+/wiki/Modal_depth /wiki/Modal_operator
+/wiki/Modal_logic /wiki/Modal_operator
+/wiki/Modal_operator /wiki/Modal_logic
