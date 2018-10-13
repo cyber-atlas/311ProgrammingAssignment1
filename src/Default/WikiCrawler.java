@@ -17,8 +17,8 @@ public class WikiCrawler {
     /**
      * The base url of the site we are using
      */
-    public static final String BASE_URL = "https://en.wikipedia.org";
-//    public static final String BASE_URL = "http://web.cs.iastate.edu/~pavan";
+//    public static final String BASE_URL = "https://en.wikipedia.org";
+    public static final String BASE_URL = "http://web.cs.iastate.edu/~pavan";
     //Seed is the related address of URL (within the wiki domain)
     private String seed;
     //Max is the maximum number of pages to consider
@@ -124,6 +124,8 @@ public class WikiCrawler {
         int iterations = 0;
         int count =0;
 
+        int maxCounter = 0;
+
         PriorityQ pq = new PriorityQ();
         Fifo fifoQ = new Fifo();
 
@@ -134,12 +136,18 @@ public class WikiCrawler {
         //If not focused used queue and add the seed
         if(focused){
             pq.add(seed,0);
+//            iterations++;
+            maxCounter++;
         }
         //If not focused initialize the fifo
+        //Adding to q so increasing iterations
         else{
             fifoQ.Enqueue(seed);
-
+//            iterations++;
+            maxCounter++;
         }
+
+        visitedHash.put(seed, true);
 
         while (iterations < max) {
 
@@ -167,18 +175,21 @@ public class WikiCrawler {
 
             ArrayList<String> links = extractLinks(currentPage);
 
-           // System.out.println("links array" + links.toString() + "\n");
+            // System.out.println("links array" + links.toString() + "\n");
             for (String link : links) {
-              //  System.out.println(link+" :links");
-               // System.out.println(visitedHash);
-                if (visitedHash.contains(link)) {
-                    //If the link has already been visited, and contains all topics, add to graph
+                //  System.out.println(link+" :links");
+                // System.out.println(visitedHash);
+                if (visitedHash.containsKey(link)) {
+                    //If already visited, and contains all topics, add to graph, it's already been added to Queue
                     if (visitedHash.get(link)) {
-                        //outFile.println(pageLink + " " + link);
-                       // System.out.println("Adding visited link" + link);
+                        outFile.println(pageLink + " " + link);
+                        System.out.println(pageLink + " " + link);
+                        System.out.println(iterations);
+                        System.out.println(maxCounter);
+//                        System.out.println("Adding visited link" + link);
                         continue;
                     } else if (!(visitedHash.get(link))) {
-                        break;
+                        continue;
                     }
                 }
 
@@ -213,38 +224,73 @@ public class WikiCrawler {
                     }
                 }
 
-                //Check if all of the topics are present check if the hashset is the same length as the topics list
-                if (topicsFound.size() != topics.length) {
-                    //System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
-                    visitedHash.put(link, false);
-                    //Continue should make it got to the next iteration of the while loop
-                    return;
+                //All the topics are in the hash set and list. Means all are present
+                if (topicsFound.size() == topics.length){
+
+//                   System.out.println(maxCounter);
+                    //If the has does not contain the link and there is room to add it to the queue
+                    if (!visitedHash.containsKey(link) && maxCounter < max) {
+                        outFile.println(pageLink + " " + link);
+                        System.out.println(pageLink + " " + link);
+                        visitedHash.put(link, true);
+
+                        //Only gets here if the all of the topics are present in the hashset
+                        if (focused) {
+                            pq.add(link, Relevance);
+                            maxCounter++;
+                        }
+
+                        if (!focused) {
+                            fifoQ.Enqueue(link);
+                            maxCounter++;
+                            //System.out.println(fifoQ.nSize);
+                        }
+                    }
+                    else if (visitedHash.containsKey(link)){
+                        //Visited already then you don't need to add it to the Queue so ignore it
+                        outFile.println(pageLink + " " + link);
+                        System.out.println(pageLink + " " + link);
+
+                    }
+
                 }
+                //Add it to the visited as false since they don't contain all topics
+                else {
+                    visitedHash.put(link, false);
+
+                }
+
+
+                /**
+                 //Check if all of the topics are present check if the hashset is the same length as the topics list
+                 if (topicsFound.size() != topics.length) {
+                 //System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
+                 visitedHash.put(link, false);
+                 //Continue should make it got to the next iteration of the while loop
+                 return;
+                 }
+                 **/
 
                 //System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
+/**
+ //Only gets here if the all of the topics are present in the hashset
+ if (focused) {
+ pq.add(link, Relevance);
+ }
 
-                //Only gets here if the all of the topics are present in the hashset
-                if (focused) {
-                    pq.add(link, Relevance);
-                }
-
-                if (!focused) {
-                    fifoQ.Enqueue(link);
-                    //System.out.println(fifoQ.nSize);
-                }
-
+ if (!focused) {
+ fifoQ.Enqueue(link);
+ //System.out.println(fifoQ.nSize);
+ }
+ **/
                 //Add the link to the visited Hashset, becuase it is in a Queue and that means has all topics
-                visitedHash.put(link, true);
-
-                //Print the curent link and the link that has everyting needed to the graph
-                if(!link.equals(pageLink)) {
-                    outFile.println(pageLink + " " + link);
-                    System.out.println(pageLink + " " + link);
-                }
+//                visitedHash.put(link, true);
 
             }
-            //System.out.println("iterations: "+ iterations);
+//           System.out.println("iterations: "+ iterations);
             iterations++;
+
+            System.out.println("iterations: "+ iterations);
         }
 
         outFile.close();

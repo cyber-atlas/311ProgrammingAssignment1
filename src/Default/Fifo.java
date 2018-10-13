@@ -20,7 +20,7 @@ public class Fifo {
     }
 
     public int getSize(){ //Gets size of queue based of off starting head position to end of queue
-        if(head == nSize){
+        if(0 == nSize){
             return 0;
         }
         return (A.size() - head);
