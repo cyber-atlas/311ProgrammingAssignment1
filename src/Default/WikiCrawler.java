@@ -180,6 +180,10 @@ public class WikiCrawler {
                 //  System.out.println(link+" :links");
                 // System.out.println(visitedHash);
                 if (visitedHash.containsKey(link)) {
+                    //Making sure the link is not the parent to avoid cycles
+                    if(link.equals(pageLink)){
+                        continue;
+                    }
                     //If already visited, and contains all topics, add to graph, it's already been added to Queue
                     if (visitedHash.get(link)) {
                         outFile.println(pageLink + " " + link);
@@ -198,7 +202,7 @@ public class WikiCrawler {
                 count++;
                 if (count %  20 == 0){
                     Thread.sleep(3000);
-                    count =0;
+//                    count =0;
                 }
 
                 int Relevance = 0;
@@ -305,7 +309,6 @@ public class WikiCrawler {
      * @param seed of the page that we are looking at
      * @return string with the HTML from a song
      */
-    //TODO how does one handle the HTML to string being null?
     public String getHTML(String seed) {
         //Stringbuilder that we will use to hold the web page
         StringBuilder HTML = new StringBuilder();
@@ -372,6 +375,17 @@ public class WikiCrawler {
         boolean reading = false;
         Scanner scan = new Scanner(input);
 
+        int index = input.toLowerCase().indexOf("<p>");
+        if (index == -1){
+                   return null;
+        }
+        else{
+            return input.substring(index);
+        }
+        /**
+        //Get the substring of the index of the
+        String retstring = input.substring(input.toLowerCase().indexOf("<p>")));
+
         while (scan.hasNextLine()) {
             nextup = scan.nextLine();
             //To deal with P
@@ -381,15 +395,22 @@ public class WikiCrawler {
                 retString.append(nextup.substring(nextup.toLowerCase().indexOf("<p>")));
                 retString.append("\n");
             }
+         **/
             //TODO probably could just break after we strip the stuff before the first <p> Return substring starting with it
             //If we are reading, add the next line of texdt
+            /**
             if (reading) {
                 retString.append(nextup);
                 retString.append("\n");
             }
+             **/
+            /**
+            retString = ()
         }
 
+
         return retString.toString();
+             **/
     }
 
 
