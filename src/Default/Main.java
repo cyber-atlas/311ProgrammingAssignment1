@@ -18,10 +18,11 @@ public class Main {
     }*/
 
     public static void testGetHtml() throws FileNotFoundException, InterruptedException {
-        String s = "/wiki/modal_depth";
+//        String s = "/wiki/A.html";
+        String s = "/wiki/Modal_depth";
         //String[] arr = {"bob" , "ross"};
-//        String[] arr = {};
-        String[] arr = {"formula"};//TODO does not work
+        String[] arr = {};
+       // String[] arr = {"formula"};//TODO does not work
         for (String string: arr){
             System.out.println("TEST INPUT TOPICS: " + string);
         }
@@ -33,13 +34,7 @@ public class Main {
 //        System.out.println(w.stripper(w.getHTML(s)));
         //System.out.println(w.extractLinks(bob));
         ArrayList<String> extract = w.extractLinks(bob);
-<<<<<<< HEAD
-//        w.crawl(true);
         w.crawl(false);
-=======
-
-        w.crawl(true);
->>>>>>> 1ec7614b8f4a1615d054aa12f7cf88f4d6e5e3ef
     }
 
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {

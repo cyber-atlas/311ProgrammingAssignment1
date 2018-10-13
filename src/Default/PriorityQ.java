@@ -9,7 +9,7 @@ public class PriorityQ {
 
     public PriorityQ(){ //constructs an empty priority queue
         this.A = new ArrayList<Node>();
-        n = 0;
+        n = 1;
     } //Initializing the queue
 
     public void add(String s, int p){ //Adds a string s with priority p to the priority queue

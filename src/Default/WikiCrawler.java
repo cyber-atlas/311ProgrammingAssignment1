@@ -18,7 +18,7 @@ public class WikiCrawler {
      * The base url of the site we are using
      */
     public static final String BASE_URL = "https://en.wikipedia.org";
-
+//    public static final String BASE_URL = "http://web.cs.iastate.edu/~pavan";
     //Seed is the related address of URL (within the wiki domain)
     private String seed;
     //Max is the maximum number of pages to consider
@@ -72,9 +72,9 @@ public class WikiCrawler {
         //We only care about links after the first <p> so we strip everything before it
         document = stripper(document);
         //Arraylist of links
-        ArrayList<String> links = new ArrayList<>();
+        ArrayList<String> links = new ArrayList<String>();
         //Hashset to hold the links we added to ArrayList
-        HashSet<String> addedLinks = new HashSet<>();
+        HashSet<String> addedLinks = new HashSet<String>();
         /**First quotes are the string for the regex.
          * Escape the quotes in the href
          * Make sure it starts with wiki/
@@ -138,13 +138,14 @@ public class WikiCrawler {
         //If not focused initialize the fifo
         else{
             fifoQ.Enqueue(seed);
+
         }
 
         while (iterations < max) {
 
-            if (iterations %  20 == 0){
+           /* if (iterations %  20 == 0){
                 Thread.sleep(3000);
-            }
+            }*/
 
             //If we are doing a focused crawl, get the page we should be on from Proirity Queue, else get from BFS Q
             //TODO fix if empty
@@ -155,23 +156,26 @@ public class WikiCrawler {
             }
             else {
                 if(fifoQ.getSize() == 0){return;}
+                //TODO update fifo size
                 pageLink = fifoQ.Dequeue();
             }
+
+
 
             String currentPage = getHTML(pageLink);
 //            System.out.println(currentPage);
 
             ArrayList<String> links = extractLinks(currentPage);
 
-            System.out.println("links array" + links.toString() + "\n");
+           // System.out.println("links array" + links.toString() + "\n");
             for (String link : links) {
-                System.out.println(link+" :links");
-                System.out.println(visitedHash);
+              //  System.out.println(link+" :links");
+               // System.out.println(visitedHash);
                 if (visitedHash.contains(link)) {
                     //If the link has already been visited, and contains all topics, add to graph
                     if (visitedHash.get(link)) {
-                        outFile.println(pageLink + " " + link);
-                        System.out.println("Adding visited link" + link);
+                        //outFile.println(pageLink + " " + link);
+                       // System.out.println("Adding visited link" + link);
                         continue;
                     } else if (!(visitedHash.get(link))) {
                         break;
@@ -211,13 +215,13 @@ public class WikiCrawler {
 
                 //Check if all of the topics are present check if the hashset is the same length as the topics list
                 if (topicsFound.size() != topics.length) {
-                    System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
+                    //System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
                     visitedHash.put(link, false);
                     //Continue should make it got to the next iteration of the while loop
-                    continue;
+                    return;
                 }
 
-                System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
+                //System.out.println(link + " | "+topicsFound.size()+" | " + topics.length);
 
                 //Only gets here if the all of the topics are present in the hashset
                 if (focused) {
@@ -226,16 +230,20 @@ public class WikiCrawler {
 
                 if (!focused) {
                     fifoQ.Enqueue(link);
+                    //System.out.println(fifoQ.nSize);
                 }
 
                 //Add the link to the visited Hashset, becuase it is in a Queue and that means has all topics
                 visitedHash.put(link, true);
 
                 //Print the curent link and the link that has everyting needed to the graph
-                outFile.println(pageLink + " " + link);
+                if(!link.equals(pageLink)) {
+                    outFile.println(pageLink + " " + link);
+                    System.out.println(pageLink + " " + link);
+                }
 
             }
-            System.out.println("iterations: "+ iterations);
+            //System.out.println("iterations: "+ iterations);
             iterations++;
         }
 
@@ -293,12 +301,15 @@ public class WikiCrawler {
                 }
             }
             //Returns the String of the String Builder
+            isr.close();
+            reader.close();
             return HTML.toString();
         } catch (IOException e) {
             e.printStackTrace();
             //returns null in case that we are not able to get the page we want
             return null;
         }
+
     }
 
     //helper method that strips anything before <p> tag from String
