@@ -1,3 +1,8 @@
+/**
+ * @author  Alex Stevenson
+ * @author John Young
+ */
+
 package Default;
 import java.util.ArrayList;
 

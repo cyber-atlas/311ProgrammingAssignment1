@@ -1,4 +1,10 @@
+/**
+ * @author  Alex Stevenson
+ * @author John Young
+ */
+
 package Default;
+
 
 import javax.management.relation.RelationException;
 import java.io.*;
@@ -164,9 +170,9 @@ public class WikiCrawler {
                     //If already visited, and contains all topics, add to graph, it's already been added to Queue
                     if (visitedHash.get(link)) {
                         outFile.println(pageLink + " " + link);
-                        System.out.println(pageLink + " " + link);
-                        System.out.println(iterations);
-                        System.out.println(maxCounter);
+//                        System.out.println(pageLink + " " + link);
+//                        System.out.println(iterations);
+//                        System.out.println(maxCounter);
 //                        System.out.println("Adding visited link" + link);
                         continue;
                     } else if (!(visitedHash.get(link))) {
@@ -213,7 +219,7 @@ public class WikiCrawler {
                     //If the has does not contain the link and there is room to add it to the queue
                     if (!visitedHash.containsKey(link) && maxCounter < max) {
                         outFile.println(pageLink + " " + link);
-                        System.out.println(pageLink + " " + link);
+//                        System.out.println(pageLink + " " + link);
                         visitedHash.put(link, true);
 
                         //Only gets here if the all of the topics are present in the hashset
@@ -231,7 +237,7 @@ public class WikiCrawler {
                     else if (visitedHash.containsKey(link)){
                         //Visited already then you don't need to add it to the Queue so ignore it
                         outFile.println(pageLink + " " + link);
-                        System.out.println(pageLink + " " + link);
+//                        System.out.println(pageLink + " " + link);
 
                     }
 
@@ -249,7 +255,7 @@ public class WikiCrawler {
 //           System.out.println("iterations: "+ iterations);
             iterations++;
 
-            System.out.println("iterations: "+ iterations);
+//            System.out.println("iterations: "+ iterations);
         }
 
         outFile.close();

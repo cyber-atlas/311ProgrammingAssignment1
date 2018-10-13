@@ -1,2 +1,0 @@
-Alexander Stevenson
-John Young
