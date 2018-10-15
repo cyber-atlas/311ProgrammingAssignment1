@@ -25,8 +25,8 @@ public class Main {
     }*/
 
     public static void testGetHtml() throws FileNotFoundException, InterruptedException {
-//        String s = "/wiki/A.html";
-        String s = "/wiki/Modal_depth";
+        String s = "/wiki/A.html";
+//        String s = "/wiki/Modal_depth";
         //String[] arr = {"bob" , "ross"};
         String[] arr = {};
        // String[] arr = {"formula"};//TODO does not work
@@ -35,7 +35,7 @@ public class Main {
         }
 //        String[] arr = {"modal"}; //TODO does not work
 
-        WikiCrawler w = new WikiCrawler(s, 3, arr, "output.txt");
+        WikiCrawler w = new WikiCrawler(s, 6, arr, "output.txt");
         String bob = w.getHTML(s);
 //        System.out.println(w.getHTML(s));
 //        System.out.println(w.stripper(w.getHTML(s)));

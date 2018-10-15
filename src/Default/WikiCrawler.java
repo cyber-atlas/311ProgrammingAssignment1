@@ -23,8 +23,8 @@ public class WikiCrawler {
     /**
      * The base url of the site we are using
      */
-    public static final String BASE_URL = "https://en.wikipedia.org";
-//    public static final String BASE_URL = "http://web.cs.iastate.edu/~pavan";
+//    public static final String BASE_URL = "https://en.wikipedia.org";
+    public static final String BASE_URL = "http://web.cs.iastate.edu/~pavan";
     //Seed is the related address of URL (within the wiki domain)
     private String seed;
     //Max is the maximum number of pages to consider
